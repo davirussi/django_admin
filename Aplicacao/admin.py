@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+from django.contrib import admin
+from models import Proprietario, Carro, Propriedade
+from django import forms
+
+class ProprietarioForm(forms.ModelForm):
+ 
+    class Meta:
+        model = Proprietario
+ 
+    def clean_telefone(self):
+        if not self.cleaned_data['telefone'][2].isdigit():
+            self.cleaned_data['telefone']=self.cleaned_data['telefone'][0:2]+self.cleaned_data['telefone'][3:]
+        if len(self.cleaned_data['telefone'])<10:
+            raise forms.ValidationError("Telefone deve conter ao menos 10 digitos")
+        if not self.cleaned_data['telefone'].isdigit():
+            raise forms.ValidationError("Digite só números")
+        return self.cleaned_data['telefone']
+          
+class PropriedadeCarroInline(admin.TabularInline):
+    model = Carro.proprietario.through
+    extra = 0
+    max_num = 1
+
+class PropriedadeProprietarioInline(admin.TabularInline):
+    model = Carro.proprietario.through
+    extra = 0
+  
+class ProprietarioAdmin(admin.ModelAdmin):
+    form = ProprietarioForm
+    list_display= ('nome', 'telefone', 'endereco','estado_civil', 'conjuge')
+    list_filter = ('nome', 'conjuge', 'estado_civil')
+    list_editable = ['telefone']
+    search_fields = ['nome','conjuge']
+    inlines = [
+        PropriedadeProprietarioInline,
+    ]
+    
+class CarroAdmin(admin.ModelAdmin):
+    list_display= ('numero_chassi', 'ano', 'modelo','marca', 'cor')
+    list_filter = ('numero_chassi', 'modelo', 'ano', 'marca')
+    search_fields = ['numero_chassi','modelo']
+    inlines = [
+        PropriedadeCarroInline,
+    ]
+    exclude = ('proprietario',)
+    
+class PropriedadeAdmin(admin.ModelAdmin):
+    list_display= ('__unicode__','data_compra', 'valor_compra')
+    list_filter = ('data_compra', 'valor_compra')
+    search_fields = ['carro__numero_chassi', 'proprietario__nome']
+
+admin.site.register(Proprietario,ProprietarioAdmin)
+admin.site.register(Carro,CarroAdmin)
+admin.site.register(Propriedade,PropriedadeAdmin)
