@@ -1,0 +1,4 @@
+django_admin
+============
+
+Simple project - implementado seguintes funcionalidades para o admin: drop down list, class verbose name e plural verbose name, relacionamento nxm com a tabela intermediária com itens extras(through), unique together - para combinações únicas, telefone com uma rústica validação, inline tabels, display de itens, filtros de itens, ediçao de itens, campo de busca por chave estrangeira, exclusão de itens de formulários." [master (root-commit) dc4a70b] Simple project - implementado seguintes funcionalidades para o admin: drop down list, class verbose name e plural verbose name, relacionamento nxm com a tabela intermediária com itens extras(through), unique together - para combinações únicas, telefone com uma rústica validação, inline tabels, display de itens, filtros de itens, ediçao de itens, campo de busca por chave estrangeira, exclusão de itens de formulários.
